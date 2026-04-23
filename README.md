@@ -1,11 +1,4 @@
-# 🚀 AWS EKS Cluster with ArgoCD, Prometheus, and More - Terraform Project
-[![LinkedIn](https://img.shields.io/badge/Connect%20with%20me%20on-LinkedIn-blue.svg)](https://www.linkedin.com/in/aman-devops/)
-[![Discord](https://img.shields.io/badge/Discord-7289DA?style=for-the-badge&logo=discord&logoColor=white)](https://discord.com/invite/jdzF8kTtw2)
-[![Medium](https://img.shields.io/badge/Medium-12100E?style=for-the-badge&logo=medium&logoColor=white)](https://medium.com/@amanpathakdevops)
-[![GitHub](https://img.shields.io/github/stars/AmanPathak-DevOps.svg?style=social)](https://github.com/AmanPathak-DevOps)
-[![Serverless](https://img.shields.io/badge/Serverless-%E2%9A%A1%EF%B8%8F-blueviolet)](https://www.serverless.com)
-[![AWS](https://img.shields.io/badge/AWS-%F0%9F%9B%A1-orange)](https://aws.amazon.com)
-[![Terraform](https://img.shields.io/badge/Terraform-%E2%9C%A8-lightgrey)](https://www.terraform.io)
+# 🚀 AWS EKS Cluster with ArgoCD, Prometheus, and Grafana launched via Terraform 
 
 Welcome to the Terraform project repository for setting up a fully functional, private AWS EKS cluster integrated with essential tools like ArgoCD, Prometheus, and Grafana. This repository provides everything you need to deploy and manage a secure and scalable Kubernetes environment on AWS.
 
@@ -20,7 +13,7 @@ This project automates the provisioning of a private EKS cluster on AWS, along w
 - **Modular Design**: The project is structured into reusable modules for easier management and customization.
 
 ### Architecture Diagram
-![Architecture Diagram](./assets/architecture-diagram.gif)
+![Architecture Diagram](./assets/architecture.png)
 
 ## 🚀 Getting Started
 
@@ -37,8 +30,8 @@ Before you begin, ensure you have the following installed:
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/joebaho/eks-terraform-project.git
-   cd eks-terraform-project
+   git clone https://github.com/Joebaho/ArgoCD-EKS-LB-Terraform.git
+   cd ArgoCD-EKS-LB-Terraform
    ```
 
 2. **Deploy the network and helper EC2 instance**:
@@ -74,6 +67,8 @@ Before you begin, ensure you have the following installed:
 6. **Open ArgoCD, Grafana, and Prometheus in your browser**:
    Follow the commands in the access section below to get the external URLs and login details.
 
+![Load Ballanceers](./assets/loadbalancer.png)
+
 ### Access ArgoCD
 
 After the `eks/` deployment completes, get the ArgoCD load balancer address:
@@ -106,6 +101,8 @@ ArgoCD login details:
 - Username: `admin`
 - Password: use the command above
 
+![ArgoCd Page](./assets/argocd.png)
+
 ### Access Grafana
 
 List the services in the `prometheus` namespace:
@@ -133,6 +130,8 @@ If you want to find the Grafana service name quickly:
 kubectl -n prometheus get svc -o wide | grep grafana
 ```
 
+![Grafana](./assets/grafana.png)
+
 ### Access Prometheus
 
 Get the Prometheus service hostname:
@@ -153,6 +152,8 @@ Open the returned address in your browser:
 ```text
 http://<PROMETHEUS-EXTERNAL-HOSTNAME>
 ```
+
+![Promotheus](./assets/prometheus.png)
 
 ### Troubleshooting Access
 
