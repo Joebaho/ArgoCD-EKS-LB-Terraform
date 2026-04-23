@@ -78,7 +78,7 @@ Before you begin, ensure you have the following installed:
 6. **Open ArgoCD, Grafana, and Prometheus in your browser**:
    Follow the commands in the access section below to get the external URLs and login details.
 
-![Load Ballanceers](./assets/loadbalancer.png)
+![Load Ballanceers](./assets/loadbalacer.png)
 
 ### Access ArgoCD
 
