@@ -46,8 +46,8 @@ Before you begin, ensure you have the following installed:
    cd vpc-ec2
    terraform init
    terraform validate
-   terraform plan -var-file=variables.tfvars
-   terraform apply -auto-approve -var-file=variables.tfvars
+   terraform plan
+   terraform apply -auto-approve
    ```
 
 3. **Deploy the EKS cluster and platform add-ons**:
@@ -55,8 +55,8 @@ Before you begin, ensure you have the following installed:
    cd ../eks
    terraform init
    terraform validate
-   terraform plan -var-file=../variables.tfvars
-   terraform apply -auto-approve -var-file=../variables.tfvars
+   terraform plan
+   terraform apply -auto-approve
    ```
 
 4. **Access the cluster and deployed tools**:
@@ -66,6 +66,7 @@ Before you begin, ensure you have the following installed:
 
 - This project supports Terraform `1.13.x` and `1.14.x`.
 - The Terraform root modules are `vpc-ec2/` and `eks/`. The repository root is not itself a Terraform root module.
+- Each Terraform root includes its own committed `terraform.tfvars`, so you can run `terraform plan` and `terraform apply` directly inside `vpc-ec2/` and `eks/` without passing `-var-file`.
 - `endpoint-public-access` is enabled in `variables.tfvars` so the Helm and Kubernetes providers can complete from a standard workstation. If you want a fully private API endpoint later, disable it after you have a private network path to the cluster.
 
 ### 📖 Detailed Guide
