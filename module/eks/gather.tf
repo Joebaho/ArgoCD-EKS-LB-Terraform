@@ -21,10 +21,10 @@ data "aws_iam_policy_document" "eks_oidc_assume_role_policy" {
 }
 
 data "aws_vpc" "vpc" {
-    filter {
-        name = "tag:Name"
-        values = [var.vpc-name]
-    }
+  filter {
+    name   = "tag:Name"
+    values = [var.vpc-name]
+  }
 }
 
 data "aws_subnets" "private_subnets" {
@@ -49,13 +49,13 @@ data "aws_subnets" "private_subnets" {
 data "aws_security_group" "eks-cluster-sg" {
   name = var.eks-sg
 
-#   filter {
-#     name   = "vpc-id"
-#     values = [data.aws_vpc.vpc.id]
-#   }
+  #   filter {
+  #     name   = "vpc-id"
+  #     values = [data.aws_vpc.vpc.id]
+  #   }
 
-#   filter {
-#     name   = "tag:Env"
-#     values = [var.env]
-#   }
+  #   filter {
+  #     name   = "tag:Env"
+  #     values = [var.env]
+  #   }
 }

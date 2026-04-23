@@ -21,7 +21,7 @@ resource "aws_eks_cluster" "eks" {
   tags = {
     Name = var.cluster-name
     Env  = var.env
-  } 
+  }
 }
 
 # OIDC Provider

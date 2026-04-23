@@ -82,7 +82,7 @@ resource "aws_route_table" "public-rt" {
 }
 
 resource "aws_route_table_association" "name" {
-  count          = 3
+  count          = var.pub-subnet-count
   route_table_id = aws_route_table.public-rt.id
   subnet_id      = aws_subnet.public-subnet[count.index].id
 
@@ -134,7 +134,7 @@ resource "aws_route_table" "private-rt" {
 }
 
 resource "aws_route_table_association" "private-rt-association" {
-  count          = 3
+  count          = var.pri-subnet-count
   route_table_id = aws_route_table.private-rt.id
   subnet_id      = aws_subnet.private-subnet[count.index].id
 
@@ -164,7 +164,7 @@ resource "aws_security_group" "eks-cluster-sg" {
   }
 
   tags = {
-    Name = var.eks-sg
+    Name = var.ec2-sg
   }
 }
 

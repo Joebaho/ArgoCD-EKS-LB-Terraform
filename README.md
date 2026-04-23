@@ -35,26 +35,38 @@ Before you begin, ensure you have the following installed:
 
 ### Quickstart
 
-1. **Clone the Repository**:
+1. **Clone the repository**:
    ```bash
    git clone https://github.com/your-repo/eks-terraform-project.git
    cd eks-terraform-project
+   ```
 
-2. **Deploy VPC and EC2: Run the following commands to deploy the VPC and an EC2 instance**:
+2. **Deploy the network and helper EC2 instance**:
    ```bash
+   cd vpc-ec2
    terraform init
    terraform validate
    terraform plan -var-file=variables.tfvars
    terraform apply -auto-approve -var-file=variables.tfvars
+   ```
 
-3. **Deploy EKS Cluster and Tools: After setting up the VPC and EC2, run the following commands to deploy the EKS cluster and tools**:
+3. **Deploy the EKS cluster and platform add-ons**:
    ```bash
+   cd ../eks
    terraform init
    terraform validate
-   terraform plan -var-file=variables.tfvars
-   terraform apply -auto-approve -var-file=variables.tfvars
+   terraform plan -var-file=../variables.tfvars
+   terraform apply -auto-approve -var-file=../variables.tfvars
+   ```
 
-4. **Access Deployed Resources: Use kubectl to interact with your EKS cluster and the deployed tools (ArgoCD, Prometheus, Grafana, etc.).**
+4. **Access the cluster and deployed tools**:
+   Use `kubectl` to interact with the EKS cluster and the deployed tools such as ArgoCD, Prometheus, and Grafana.
+
+### Notes
+
+- This project supports Terraform `1.13.x` and `1.14.x`.
+- The Terraform root modules are `vpc-ec2/` and `eks/`. The repository root is not itself a Terraform root module.
+- `endpoint-public-access` is enabled in `variables.tfvars` so the Helm and Kubernetes providers can complete from a standard workstation. If you want a fully private API endpoint later, disable it after you have a private network path to the cluster.
 
 ### 📖 Detailed Guide
 

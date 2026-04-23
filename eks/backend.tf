@@ -1,5 +1,5 @@
 terraform {
-  required_version = "~> 1.13.3"
+  required_version = ">= 1.13.3, < 1.15.0"
   required_providers {
     aws = {
       source  = "hashicorp/aws"
@@ -15,8 +15,8 @@ terraform {
     }
   }
   backend "s3" {
-    bucket       = "dev-aman-tf-bucket"
-    region       = "us-east-1"
+    bucket       = "baho-backup-bucket"
+    region       = "us-west-2"
     key          = "EKS-ArgoCD-AWS-LB-Controller-Terraform/eks.tfstate"
     use_lockfile = true
     encrypt      = true
@@ -33,7 +33,7 @@ provider "kubernetes" {
   token                  = data.aws_eks_cluster_auth.eks-cluster-auth.token
   exec {
     api_version = "client.authentication.k8s.io/v1beta1"
-    args        = ["eks", "get-token", "--cluster-name", var.cluster-name]
+    args        = ["eks", "get-token", "--cluster-name", data.aws_eks_cluster.eks-cluster.name]
     command     = "aws"
   }
 }
@@ -45,7 +45,7 @@ provider "helm" {
     token                  = data.aws_eks_cluster_auth.eks-cluster-auth.token
     exec {
       api_version = "client.authentication.k8s.io/v1beta1"
-      args        = ["eks", "get-token", "--cluster-name", var.cluster-name]
+      args        = ["eks", "get-token", "--cluster-name", data.aws_eks_cluster.eks-cluster.name]
       command     = "aws"
     }
   }

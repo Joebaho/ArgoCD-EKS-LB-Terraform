@@ -54,17 +54,17 @@ resource "aws_iam_role_policy" "iam-role-policy" {
         Resource = "*"
       },
       {
-        Effect: "Allow",
-        Action: [
-           "ec2messages:AcknowledgeMessage",
-           "ec2messages:DeleteMessage",
-           "ec2messages:FailMessage",
-           "ec2messages:GetEndpoint",
-           "ec2messages:GetMessages",
-           "ec2messages:SendReply"
-            ],
-        Resource: "*"
-        }
+        Effect : "Allow",
+        Action : [
+          "ec2messages:AcknowledgeMessage",
+          "ec2messages:DeleteMessage",
+          "ec2messages:FailMessage",
+          "ec2messages:GetEndpoint",
+          "ec2messages:GetMessages",
+          "ec2messages:SendReply"
+        ],
+        Resource : "*"
+      }
     ]
   })
 }
