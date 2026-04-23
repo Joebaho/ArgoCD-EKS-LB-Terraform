@@ -43,6 +43,15 @@ Before you begin, ensure you have the following installed:
    terraform apply -auto-approve
    ```
 
+   After this step, connect to the helper EC2 instance (via ssm) created by the network configuration. This EC2 instance is intended to be used as an administration host for the cluster.
+
+   Once you are on the EC2 instance, configure your AWS credentials so Terraform, `aws`, `kubectl`, and `helm` can communicate with your AWS account and EKS cluster:
+
+   ```bash
+   aws configure
+   aws sts get-caller-identity
+   ```
+
 3. **Deploy the EKS cluster and platform add-ons**:
    ```bash
    cd ../eks
@@ -51,6 +60,8 @@ Before you begin, ensure you have the following installed:
    terraform plan
    terraform apply -auto-approve
    ```
+
+   After the EKS deployment completes, continue working from the helper EC2 instance and make sure your AWS credentials are still configured correctly before trying to access the cluster from `kubectl`.
 
 4. **Configure kubectl for the new cluster**:
    ```bash
@@ -194,6 +205,8 @@ If you want to review the destroy plan before deleting resources, run:
 ```bash
 terraform plan -destroy
 ```
+
+![Destroy](./assets/destroy.png)
 
 ### Notes
 
