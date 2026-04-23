@@ -37,7 +37,7 @@ Before you begin, ensure you have the following installed:
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/your-repo/eks-terraform-project.git
+   git clone https://github.com/joebaho/eks-terraform-project.git
    cd eks-terraform-project
    ```
 
@@ -59,8 +59,140 @@ Before you begin, ensure you have the following installed:
    terraform apply -auto-approve
    ```
 
-4. **Access the cluster and deployed tools**:
-   Use `kubectl` to interact with the EKS cluster and the deployed tools such as ArgoCD, Prometheus, and Grafana.
+4. **Configure kubectl for the new cluster**:
+   ```bash
+   aws eks update-kubeconfig --region us-west-2 --name dev-medium-eks-cluster
+   kubectl get nodes
+   ```
+
+5. **Check that the add-ons are running**:
+   ```bash
+   kubectl get pods -A
+   kubectl get svc -A
+   ```
+
+6. **Open ArgoCD, Grafana, and Prometheus in your browser**:
+   Follow the commands in the access section below to get the external URLs and login details.
+
+### Access ArgoCD
+
+After the `eks/` deployment completes, get the ArgoCD load balancer address:
+
+```bash
+kubectl -n argocd get svc
+```
+
+Look for the ArgoCD server service and copy the `EXTERNAL-IP` or hostname. You can also fetch it directly:
+
+```bash
+kubectl -n argocd get svc argocd-server \
+  -o jsonpath="{.status.loadBalancer.ingress[0].hostname}{.status.loadBalancer.ingress[0].ip}" && echo
+```
+
+Open the returned address in your browser:
+
+```text
+http://<ARGOCD-EXTERNAL-HOSTNAME>
+```
+
+Get the initial ArgoCD admin password:
+
+```bash
+kubectl -n argocd get secret argocd-initial-admin-secret \
+  -o jsonpath="{.data.password}" | base64 --decode && echo
+```
+
+ArgoCD login details:
+- Username: `admin`
+- Password: use the command above
+
+### Access Grafana
+
+List the services in the `prometheus` namespace:
+
+```bash
+kubectl -n prometheus get svc
+```
+
+Find the Grafana service, usually named `prometheus-grafana`, then get its load balancer hostname:
+
+```bash
+kubectl -n prometheus get svc prometheus-grafana \
+  -o jsonpath="{.status.loadBalancer.ingress[0].hostname}{.status.loadBalancer.ingress[0].ip}" && echo
+```
+
+Open the returned address in your browser:
+
+```text
+http://<GRAFANA-EXTERNAL-HOSTNAME>
+```
+
+If you want to find the Grafana service name quickly:
+
+```bash
+kubectl -n prometheus get svc -o wide | grep grafana
+```
+
+### Access Prometheus
+
+Get the Prometheus service hostname:
+
+```bash
+kubectl -n prometheus get svc -o wide | grep prometheus
+```
+
+Then fetch the external address for the Prometheus service:
+
+```bash
+kubectl -n prometheus get svc prometheus-kube-prometheus-prometheus \
+  -o jsonpath="{.status.loadBalancer.ingress[0].hostname}{.status.loadBalancer.ingress[0].ip}" && echo
+```
+
+Open the returned address in your browser:
+
+```text
+http://<PROMETHEUS-EXTERNAL-HOSTNAME>
+```
+
+### Troubleshooting Access
+
+If the external address is still pending, the AWS Load Balancer may still be provisioning. Check again after a few minutes:
+
+```bash
+kubectl get svc -A
+```
+
+Useful troubleshooting commands:
+
+```bash
+kubectl get pods -A
+kubectl get svc -A
+kubectl get ingress -A
+kubectl -n argocd get svc
+kubectl -n prometheus get svc
+```
+
+### Destroy The Infrastructure
+
+Destroy the stacks in reverse order. Always destroy `eks/` first, then destroy `vpc-ec2/`.
+
+1. **Destroy the EKS cluster and add-ons**:
+   ```bash
+   cd eks
+   terraform destroy -auto-approve
+   ```
+
+2. **Destroy the VPC and helper EC2 instance**:
+   ```bash
+   cd ../vpc-ec2
+   terraform destroy -auto-approve
+   ```
+
+If you want to review the destroy plan before deleting resources, run:
+
+```bash
+terraform plan -destroy
+```
 
 ### Notes
 
@@ -68,17 +200,36 @@ Before you begin, ensure you have the following installed:
 - The Terraform root modules are `vpc-ec2/` and `eks/`. The repository root is not itself a Terraform root module.
 - Each Terraform root includes its own committed `terraform.tfvars`, so you can run `terraform plan` and `terraform apply` directly inside `vpc-ec2/` and `eks/` without passing `-var-file`.
 - `endpoint-public-access` is enabled in `variables.tfvars` so the Helm and Kubernetes providers can complete from a standard workstation. If you want a fully private API endpoint later, disable it after you have a private network path to the cluster.
+- ArgoCD is exposed through a `LoadBalancer` service in the `argocd` namespace.
+- Grafana and Prometheus are exposed through `LoadBalancer` services in the `prometheus` namespace.
 
-### 📖 Detailed Guide
+## 🤝 Contribution
 
-For a complete step-by-step guide, including screenshots and detailed explanations, please refer to the [blog post](https://amanpathakdevops.medium.com/). This post covers all the necessary steps to successfully implement this project.
+Pull requests are welcome. For major changes, please open an issue first.
 
-## Contributing
-We welcome contributions! If you have ideas for enhancements or find any issues, please open a pull request or file an issue.
+## 👨‍💻 Author
 
-## License
-This project is licensed under the [MIT License](LICENSE).
+**Joseph Mbatchou**
 
-## Contact
+• DevOps / Cloud / Platform  Engineer   
+• Content Creator / AWS Builder
 
-If you have any questions, suggestions, or feedback, please feel free to join the [Discord Server](https://lnkd.in/dsEdxpst).
+## 🔗 Connect With Me
+
+🌐 Website: [https://platform.joebahocloud.com](https://platform.joebahocloud.com)
+
+💼 LinkedIn: [https://www.linkedin.com/in/josephmbatchou/](https://www.linkedin.com/in/josephmbatchou/)
+
+🐦 X/Twitter: [https://www.twitter.com/Joebaho237](https://www.twitter.com/Joebaho237)
+
+▶️ YouTube: [https://www.youtube.com/@josephmbatchou5596](https://www.youtube.com/@josephmbatchou5596)
+
+🔗 Github: [https://github.com/Joebaho](https://github.com/Joebaho)
+
+📦 Dockerhub: [https://hub.docker.com/u/joebaho2](https://hub.docker.com/u/joebaho2)
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License — see the LICENSE file for details.
